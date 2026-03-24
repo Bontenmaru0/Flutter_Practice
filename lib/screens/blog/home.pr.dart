@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../models/article.model.dart';
+import '../../widgets/shared_assets/custom_drawer.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -9,12 +10,6 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Modern Samurai'),
-        actions: [
-          Padding(
-            padding: EdgeInsets.only(right: 16),
-            child: CircleAvatar(child: Text('S'.toUpperCase())),
-          ),
-        ],
       ),
       body: Column(
         children: [
@@ -113,6 +108,7 @@ class HomeScreen extends StatelessWidget {
           ),
         ],
       ),
+      drawer: CustomDrawer(),
     );
   }
 }

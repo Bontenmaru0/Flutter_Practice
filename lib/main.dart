@@ -22,6 +22,7 @@ class MainApp extends StatelessWidget {
       theme: ThemeData(
         appBarTheme: AppBarTheme(backgroundColor: Colors.white,),
         scaffoldBackgroundColor: Colors.white,
+        useMaterial3: true
       ),
       scrollBehavior: ScrollBehavior().copyWith(
         dragDevices: {
