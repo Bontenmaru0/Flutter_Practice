@@ -28,7 +28,8 @@ class CustomDrawer extends StatelessWidget {
             child: ListView(
               children: [
                 ListTile(title: const Text("Blog"), onTap: () => context.go('/')),
-                ListTile(title: const Text("Counter (Change Notifier Provider)"), onTap: () => context.go('/counter'))
+                ListTile(title: const Text("Counter (Change Notifier Provider)"), onTap: () => context.go('/counter_cnp')),
+                ListTile(title: const Text("Counter (Value Notifier)"), onTap: () => context.go('/counter_vn'))
               ],
             ),
           ),

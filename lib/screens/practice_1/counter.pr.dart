@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../widgets/shared_assets/custom_drawer.dart';
-import '../../models/counter/counter.model.dart';
+import '../../models/practice_1/counter.model.dart';
 
-class CounterWidget extends StatelessWidget {
-  const CounterWidget({super.key});
+class CounterCNPScreen extends StatelessWidget {
+  const CounterCNPScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
