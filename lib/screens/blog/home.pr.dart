@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../models/article.model.dart';
+import '../../models/blog/article.model.dart';
 import '../../widgets/shared_assets/custom_drawer.dart';
 
 class HomeScreen extends StatelessWidget {

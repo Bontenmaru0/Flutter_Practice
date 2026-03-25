@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class CustomDrawer extends StatelessWidget {
   const CustomDrawer({super.key});
@@ -25,7 +26,10 @@ class CustomDrawer extends StatelessWidget {
           ),
           Expanded(
             child: ListView(
-              children: [ListTile(title: Text("Something."), onTap: () => {})],
+              children: [
+                ListTile(title: const Text("Blog"), onTap: () => context.go('/')),
+                ListTile(title: const Text("Counter (Change Notifier Provider)"), onTap: () => context.go('/counter'))
+              ],
             ),
           ),
         ],
