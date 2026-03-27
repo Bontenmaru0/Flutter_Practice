@@ -10,6 +10,25 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Modern Samurai'),
+        actions: [
+          Padding(
+            padding: EdgeInsetsGeometry.only(right: 16),
+            child: Stack(
+              children: [
+                CircleAvatar(child: Text("?")),
+                Positioned(
+                  bottom: -2,
+                  right: -2,
+                  child: CircleAvatar(
+                    backgroundColor: Colors.white,
+                    radius: 8,
+                    child: Icon(size: 13,Icons.keyboard_arrow_down),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
       body: Column(
         children: [
