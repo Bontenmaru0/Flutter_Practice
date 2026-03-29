@@ -22,7 +22,7 @@ class HomeScreen extends StatelessWidget {
                   child: CircleAvatar(
                     backgroundColor: Colors.white,
                     radius: 8,
-                    child: Icon(size: 13,Icons.keyboard_arrow_down),
+                    child: Icon(size: 13, Icons.keyboard_arrow_down),
                   ),
                 ),
               ],
@@ -124,6 +124,22 @@ class HomeScreen extends StatelessWidget {
                       );
                     },
                   ),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              IconButton(onPressed: () => {}, icon: Icon(Icons.first_page)),
+              IconButton(onPressed: () => {}, icon: Icon(Icons.chevron_left)),
+              InkWell(
+                onTap: () => {},
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  child: const Text("Page 1 of 16"),
+                ),
+              ),
+              IconButton(onPressed: () => {}, icon: Icon(Icons.chevron_right)),
+              IconButton(onPressed: () => {}, icon: Icon(Icons.last_page))
+            ],
           ),
         ],
       ),
