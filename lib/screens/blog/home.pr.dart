@@ -2,8 +2,15 @@ import 'package:flutter/material.dart';
 import '../../models/blog/article.model.dart';
 import '../../widgets/shared_assets/custom_drawer.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  int currentPage = 1;
 
   @override
   Widget build(BuildContext context) {
@@ -125,22 +132,70 @@ class HomeScreen extends StatelessWidget {
                     },
                   ),
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              IconButton(onPressed: () => {}, icon: Icon(Icons.first_page)),
-              IconButton(onPressed: () => {}, icon: Icon(Icons.chevron_left)),
-              InkWell(
-                onTap: () => {},
-                child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                  child: const Text("Page 1 of 16"),
-                ),
-              ),
-              IconButton(onPressed: () => {}, icon: Icon(Icons.chevron_right)),
-              IconButton(onPressed: () => {}, icon: Icon(Icons.last_page))
-            ],
-          ),
+
+          if (articles.isNotEmpty)
+            Builder(
+              builder: (context) {
+                final limit = 5;
+                final totalPages = (articles.length / limit).ceil();
+
+                return Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    IconButton(
+                      onPressed: (articles.isEmpty || currentPage == 1)
+                          ? null
+                          : () {
+                              if (currentPage > 1) {
+                                setState(() => currentPage = 1);
+                              }
+                            },
+                      icon: Icon(Icons.first_page),
+                    ),
+                    IconButton(
+                      onPressed: (articles.isEmpty || currentPage == 1)
+                          ? null
+                          : () {
+                              if (currentPage > 1) {
+                                setState(() => currentPage--);
+                              }
+                            },
+                      icon: Icon(Icons.chevron_left),
+                    ),
+                    InkWell(
+                      onTap: () {},
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 12,
+                          vertical: 6,
+                        ),
+                        child: Text("Page $currentPage of $totalPages"),
+                      ),
+                    ),
+                    IconButton(
+                      onPressed: (articles.isEmpty || currentPage == totalPages)
+                          ? null
+                          : () {
+                              if (currentPage < totalPages) {
+                                setState(() => currentPage++);
+                              }
+                            },
+                      icon: Icon(Icons.chevron_right),
+                    ),
+                    IconButton(
+                      onPressed: (articles.isEmpty || currentPage == totalPages)
+                          ? null
+                          : () {
+                              if (currentPage < totalPages) {
+                                setState(() => currentPage = totalPages);
+                              }
+                            },
+                      icon: Icon(Icons.last_page),
+                    ),
+                  ],
+                );
+              },
+            ),
         ],
       ),
       drawer: CustomDrawer(),
