@@ -11,6 +11,29 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int currentPage = 1;
+  final int limit = 5;
+  List<ArticleModel> paginatedArticles = [];
+
+  Future<List<ArticleModel>> _fetchArticle(int currentPage, int limit) async {
+    int offSet = (currentPage - 1) * limit;
+
+    final paginatedArticles = articles.skip(offSet).take(limit).toList();
+
+    return paginatedArticles;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _loadArticle();
+  }
+
+  Future<void> _loadArticle() async {
+    final data = await _fetchArticle(currentPage, limit);
+    setState(() {
+      paginatedArticles = data;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -66,13 +89,13 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
           Expanded(
-            child: articles.isEmpty
+            child: paginatedArticles.isEmpty
                 ? const Center(child: Text("No articles yet."))
                 : ListView.builder(
                     padding: const EdgeInsets.all(10),
-                    itemCount: articles.length,
+                    itemCount: paginatedArticles.length,
                     itemBuilder: (context, index) {
-                      final article = articles[index];
+                      final article = paginatedArticles[index];
 
                       return Card(
                         shape: const RoundedRectangleBorder(
@@ -145,9 +168,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     IconButton(
                       onPressed: (articles.isEmpty || currentPage == 1)
                           ? null
-                          : () {
+                          : () async {
                               if (currentPage > 1) {
-                                setState(() => currentPage = 1);
+                                currentPage = 1;
+                                await _loadArticle();
                               }
                             },
                       icon: Icon(Icons.first_page),
@@ -155,9 +179,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     IconButton(
                       onPressed: (articles.isEmpty || currentPage == 1)
                           ? null
-                          : () {
+                          : () async {
                               if (currentPage > 1) {
-                                setState(() => currentPage--);
+                                 currentPage--;
+                                 await _loadArticle();
                               }
                             },
                       icon: Icon(Icons.chevron_left),
@@ -175,9 +200,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     IconButton(
                       onPressed: (articles.isEmpty || currentPage == totalPages)
                           ? null
-                          : () {
+                          : () async {
                               if (currentPage < totalPages) {
-                                setState(() => currentPage++);
+                                currentPage++;
+                                await _loadArticle();
                               }
                             },
                       icon: Icon(Icons.chevron_right),
@@ -185,9 +211,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     IconButton(
                       onPressed: (articles.isEmpty || currentPage == totalPages)
                           ? null
-                          : () {
+                          : () async {
                               if (currentPage < totalPages) {
-                                setState(() => currentPage = totalPages);
+                                currentPage = totalPages;
+                                await _loadArticle();
                               }
                             },
                       icon: Icon(Icons.last_page),
@@ -203,6 +230,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 }
 
+// date to time/day converter
 String timeAgo(DateTime dateTime) {
   final now = DateTime.now();
   final difference = now.difference(dateTime);
@@ -217,3 +245,145 @@ String timeAgo(DateTime dateTime) {
     return '${difference.inDays} day${difference.inDays == 1 ? '' : 's'} ago';
   }
 }
+
+//samle data
+final List<ArticleModel> articles = [
+  ArticleModel(
+    title: 'Flutter 4.0: What to Expect',
+    content:
+        'In this article we break down Flutter 4.0 features, performance updates, and the new Material 3 APIs.',
+    fullName: 'Mina Takahashi',
+    images: [
+      ImageModel(
+        imageUrl: 'https://picsum.photos/300/200?random=1',
+        altText: 'Flutter code screenshot',
+        position: 1,
+      ),
+    ],
+    createdAt: DateTime.now().subtract(const Duration(days: 1)),
+  ),
+  ArticleModel(
+    title: 'State Management in 2026',
+    content:
+        'A practical guide to provider, Riverpod, BLoC, and new patterns for production apps.',
+    fullName: 'Daniel Cho',
+    images: [
+      ImageModel(
+        imageUrl: 'https://picsum.photos/300/200?random=2',
+        altText: 'State graph',
+        position: 1,
+      ),
+    ],
+    createdAt: DateTime.now().subtract(const Duration(days: 2)),
+  ),
+  ArticleModel(
+    title: 'Design Systems with Figma + Flutter',
+    content:
+        'How to sync your Figma tokens into Flutter and keep consistent styles across teams.',
+    fullName: 'Nia Herrera',
+    images: [
+      ImageModel(
+        imageUrl: 'https://picsum.photos/300/200?random=3',
+        altText: 'Design system cards',
+        position: 1,
+      ),
+    ],
+    createdAt: DateTime.now().subtract(const Duration(days: 3)),
+  ),
+  ArticleModel(
+    title: 'Building Fast Offline Apps',
+    content:
+        'Learn offline caching patterns with sqflite, ObjectBox, and Firestore in Flutter apps.',
+    fullName: 'Leo Patel',
+    images: [
+      ImageModel(
+        imageUrl: 'https://picsum.photos/300/200?random=4',
+        altText: 'Offline app icon',
+        position: 1,
+      ),
+    ],
+    createdAt: DateTime.now().subtract(const Duration(days: 5)),
+  ),
+  ArticleModel(
+    title: 'Accessibility in Flutter',
+    content:
+        'A checklist for using semantics, contrast, and keyboard navigation in your app.',
+    fullName: 'Aya Rivera',
+    images: [
+      ImageModel(
+        imageUrl: 'https://picsum.photos/300/200?random=5',
+        altText: 'Accessibility features',
+        position: 1,
+      ),
+    ],
+    createdAt: DateTime.now().subtract(const Duration(days: 7)),
+  ),
+  ArticleModel(
+    title: 'Advanced Animations',
+    content:
+        'Create rich motion experiences with AnimatedBuilder, custom Physics, and Implicit animations.',
+    fullName: 'Jonas Weber',
+    images: [
+      ImageModel(
+        imageUrl: 'https://picsum.photos/300/200?random=6',
+        altText: 'Animation timeline',
+        position: 1,
+      ),
+    ],
+    createdAt: DateTime.now().subtract(const Duration(days: 8)),
+  ),
+  ArticleModel(
+    title: 'Clean Architecture for Flutter',
+    content:
+        'How to organize features, layers, and tests for maintainable apps.',
+    fullName: 'Sofia Mendez',
+    images: [
+      ImageModel(
+        imageUrl: 'https://picsum.photos/300/200?random=7',
+        altText: 'Architecture diagram',
+        position: 1,
+      ),
+    ],
+    createdAt: DateTime.now().subtract(const Duration(days: 10)),
+  ),
+  ArticleModel(
+    title: 'Flutter Web Production Tips',
+    content: 'Optimize bundle size, caching, and SEO for web deployments.',
+    fullName: 'Ravi Kumar',
+    images: [
+      ImageModel(
+        imageUrl: 'https://picsum.photos/300/200?random=8',
+        altText: 'Flutter web preview',
+        position: 1,
+      ),
+    ],
+    createdAt: DateTime.now().subtract(const Duration(days: 12)),
+  ),
+  ArticleModel(
+    title: 'Testing with Flutter 4',
+    content:
+        'Unit, widget, and integration test patterns with new test coverage tools.',
+    fullName: 'Elena Scott',
+    images: [
+      ImageModel(
+        imageUrl: 'https://picsum.photos/300/200?random=9',
+        altText: 'Testing dashboard',
+        position: 1,
+      ),
+    ],
+    createdAt: DateTime.now().subtract(const Duration(days: 14)),
+  ),
+  ArticleModel(
+    title: 'Backend for Flutter without Firebase',
+    content: 'Using Supabase, Hasura, and REST APIs for scalable app backends.',
+    fullName: 'Mika Owusu',
+    images: [
+      ImageModel(
+        imageUrl: 'https://picsum.photos/300/200?random=10',
+        altText: 'Backend architecture',
+        position: 1,
+      ),
+    ],
+    createdAt: DateTime.now().subtract(const Duration(days: 15)),
+  ),
+];
