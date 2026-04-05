@@ -12,13 +12,12 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int currentPage = 1;
   final int limit = 5;
-  List<ArticleModel> paginatedArticles = [];
 
-  Future<List<ArticleModel>> _fetchArticle(int currentPage, int limit) async {
+  List<ArticleModel> articles = [];
+
+  List<ArticleModel> _fetchArticle(int currentPage, int limit){
     int offSet = (currentPage - 1) * limit;
-
-    final paginatedArticles = articles.skip(offSet).take(limit).toList();
-
+    final paginatedArticles = articlesData.skip(offSet).take(limit).toList();
     return paginatedArticles;
   }
 
@@ -28,10 +27,10 @@ class _HomeScreenState extends State<HomeScreen> {
     _loadArticle();
   }
 
-  Future<void> _loadArticle() async {
-    final data = await _fetchArticle(currentPage, limit);
+  void _loadArticle() {
+    final data = _fetchArticle(currentPage, limit);
     setState(() {
-      paginatedArticles = data;
+      articles = data;
     });
   }
 
@@ -89,13 +88,13 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
           Expanded(
-            child: paginatedArticles.isEmpty
+            child: articles.isEmpty
                 ? const Center(child: Text("No articles yet."))
                 : ListView.builder(
                     padding: const EdgeInsets.all(10),
-                    itemCount: paginatedArticles.length,
+                    itemCount: articles.length,
                     itemBuilder: (context, index) {
-                      final article = paginatedArticles[index];
+                      final article = articles[index];
 
                       return Card(
                         shape: const RoundedRectangleBorder(
@@ -159,8 +158,7 @@ class _HomeScreenState extends State<HomeScreen> {
           if (articles.isNotEmpty)
             Builder(
               builder: (context) {
-                final limit = 5;
-                final totalPages = (articles.length / limit).ceil();
+                final totalPages = (articlesData.length / limit).ceil();
 
                 return Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -168,10 +166,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     IconButton(
                       onPressed: (articles.isEmpty || currentPage == 1)
                           ? null
-                          : () async {
+                          : () {
                               if (currentPage > 1) {
                                 currentPage = 1;
-                                await _loadArticle();
+                                _loadArticle();
                               }
                             },
                       icon: Icon(Icons.first_page),
@@ -179,10 +177,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     IconButton(
                       onPressed: (articles.isEmpty || currentPage == 1)
                           ? null
-                          : () async {
+                          : () {
                               if (currentPage > 1) {
-                                 currentPage--;
-                                 await _loadArticle();
+                                currentPage--;
+                                _loadArticle();
                               }
                             },
                       icon: Icon(Icons.chevron_left),
@@ -200,10 +198,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     IconButton(
                       onPressed: (articles.isEmpty || currentPage == totalPages)
                           ? null
-                          : () async {
+                          : () {
                               if (currentPage < totalPages) {
                                 currentPage++;
-                                await _loadArticle();
+                                _loadArticle();
                               }
                             },
                       icon: Icon(Icons.chevron_right),
@@ -211,10 +209,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     IconButton(
                       onPressed: (articles.isEmpty || currentPage == totalPages)
                           ? null
-                          : () async {
+                          : () {
                               if (currentPage < totalPages) {
                                 currentPage = totalPages;
-                                await _loadArticle();
+                                _loadArticle();
                               }
                             },
                       icon: Icon(Icons.last_page),
@@ -230,7 +228,6 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 }
 
-// date to time/day converter
 String timeAgo(DateTime dateTime) {
   final now = DateTime.now();
   final difference = now.difference(dateTime);
@@ -247,7 +244,7 @@ String timeAgo(DateTime dateTime) {
 }
 
 //samle data
-final List<ArticleModel> articles = [
+final List<ArticleModel> articlesData = [
   ArticleModel(
     title: 'Flutter 4.0: What to Expect',
     content:
