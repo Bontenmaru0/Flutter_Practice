@@ -35,6 +35,95 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
+  Future<void> _openPaginationPicker(int totalPages) async {
+    final selectedPage = await showGeneralDialog<int>(
+      context: context,
+      barrierDismissible: true,
+      barrierLabel: 'Pagination Picker',
+      barrierColor: Colors.transparent,
+      pageBuilder: (context, animation, secondaryAnimation) {
+        return SafeArea(
+          child: Stack(
+            children: [
+              Positioned.fill(
+                child: GestureDetector(
+                  behavior: HitTestBehavior.opaque,
+                  onTap: () => Navigator.of(context).pop(),
+                  child: const SizedBox.expand(),
+                ),
+              ),
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: Padding(
+                  padding: const EdgeInsets.only(bottom: 72),
+                  child: Material(
+                    child: Container(
+                      width: 250,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: 8,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        border: Border.all(color: Colors.black),
+                        borderRadius: BorderRadius.zero,
+                      ),
+                      child: SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          children: List.generate(totalPages, (index) {
+                            final pageNumber = index + 1;
+                            final isCurrent = pageNumber == currentPage;
+                            return Padding(
+                              padding: const EdgeInsets.only(right: 8),
+                              child: InkWell(
+                                onTap: () {
+                                  Navigator.of(context).pop(pageNumber);
+                                },
+                                child: Container(
+                                  width: 40,
+                                  height: 32,
+                                  alignment: Alignment.center,
+                                  decoration: BoxDecoration(
+                                    color: isCurrent
+                                        ? Colors.black
+                                        : Colors.white,
+                                    border: Border.all(color: Colors.black),
+                                    borderRadius: BorderRadius.zero,
+                                  ),
+                                  child: Text(
+                                    '$pageNumber',
+                                    style: TextStyle(
+                                      color: isCurrent
+                                          ? Colors.white
+                                          : Colors.black,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            );
+                          }),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+
+    if (!mounted || selectedPage == null || selectedPage == currentPage) return;
+    setState(() {
+      currentPage = selectedPage;
+    });
+    _loadArticle();
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -188,7 +277,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       icon: Icon(Icons.chevron_left),
                     ),
                     InkWell(
-                      onTap: () {},
+                      onTap: () async { await _openPaginationPicker(totalPages);},
                       child: Container(
                         padding: const EdgeInsets.symmetric(
                           horizontal: 12,
